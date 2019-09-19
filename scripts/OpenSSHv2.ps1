@@ -28,8 +28,6 @@ New-Item -Path ($ENV:USERPROFILE + "\.ssh") -ItemType Directory
 
 # Copie de la cle publique
 Add-Content ($ENV:USERPROFILE + "\.ssh\authorized_keys") $key
-#Add-Content C:\Users\$user\.ssh\authorized_keys $keys
-
 
 # Parametrage du fichier sshd_config
 (Get-Content C:\ProgramData\ssh\sshd_config).Replace('#PubkeyAuthentication yes' , 'PubkeyAuthentication yes') | Set-Content C:\ProgramData\ssh\sshd_config
