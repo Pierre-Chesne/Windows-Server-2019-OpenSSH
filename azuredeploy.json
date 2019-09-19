@@ -202,7 +202,7 @@
                 "typeHandlerVersion": "1.9",
                 "settings": {
                     "fileUris": [
-                        "https://storagecustomscript.blob.core.windows.net/powershell/OpenSSHv3.ps1"
+                        "https://github.com/Pierre-Chesne/Windows-Server-2019-OpenSSH/blob/master/scripts/OpenSSHv1.ps1"
                     ],
                     "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File OpenSSHv3.ps1', ' -key ', parameters('key') )]"
                 },
