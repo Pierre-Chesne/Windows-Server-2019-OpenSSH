@@ -1,0 +1,214 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vmName": {
+            "type": "string",
+            "metadata": {
+                "description": "Nom de la VM."
+            },
+            "defaultValue": "VM-2019"
+        },
+        "adminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "Username for the Virtual Machine."
+            },
+            "defaultValue": "pierrc"
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Password for the Virtual Machine."
+            }
+        },
+        "key": {
+            "type": "string",
+            "metadata": {
+                "description": "cle publique"
+            }
+        },
+        "windowsOSVersion": {
+            "type": "string",
+            "defaultValue": "2019-Datacenter",
+            "allowedValues": [
+                "2019-Datacenter",
+                "2019-Datacenter-Core",
+                "2019-Datacenter-with-Containers"
+            ],
+            "metadata": {
+                "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
+            }
+        },
+        "vmSize": {
+            "type": "string",
+            "metadata": {
+                "description": "Taille de la VM."
+            },
+            "defaultValue": "Standard_A2_v2"
+        },
+        "publicIPAddressName": {
+            "type": "string",
+            "metadata": {
+                "description": "Ip Publique de la VM."
+            },
+            "defaultValue": "PublicIP"
+        },
+        "virtualNetworkName": {
+            "type": "string",
+            "metadata": {
+                "description": "Nom du Vnet."
+            },
+            "defaultValue": "Vnet-2019"
+        },
+        "addressPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Espace d'adressage du Vnet."
+            },
+            "defaultValue": "10.0.0.0/16",
+            "allowedValues": [
+                "10.0.0.0/16",
+                "172.16.0.0/16",
+                "192.168.0.16"
+            ]
+        },
+        "subnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Nom du subnet."
+            },
+            "defaultValue": "Subnet-2019"
+        },
+        "subnetPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Numero du subnet"
+            },
+            "defaultValue": "10.0.0.0/24"
+        }
+    },
+    "variables": {
+        "nicName": "VMNic-2019",
+        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('publicIPAddressName')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('virtualNetworkName')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('addressPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('subnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('subnetPrefix')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2018-11-01",
+            "name": "[variables('nicName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses/', parameters('publicIPAddressName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('publicIPAddressName'))]"
+                            },
+                            "subnet": {
+                                "id": "[variables('subnetRef')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2018-10-01",
+            "name": "[parameters('vmName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('vmName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "[parameters('windowsOSVersion')]",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "createOption": "FromImage",
+                        "name": "[concat('osdisk-', parameters('vmName'))]"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2019-03-01",
+            "name": "[concat(parameters('vmName'), '/CustomScriptExtension')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+            ],
+            "properties": {
+                "autoUpgradeMinorVersion": true,
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.9",
+                "settings": {
+                    "fileUris": [
+                        "https://storagecustomscript.blob.core.windows.net/powershell/OpenSSHv3.ps1"
+                    ],
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File OpenSSHv3.ps1', ' -key ', parameters('key') )]"
+                },
+                "protectedSettings": {}
+            }
+        }
+    ],
+    "outputs": {}
+}
