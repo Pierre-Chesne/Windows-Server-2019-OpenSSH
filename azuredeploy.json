@@ -204,7 +204,7 @@
                     "fileUris": [
                         "https://github.com/Pierre-Chesne/Windows-Server-2019-OpenSSH/blob/master/scripts/OpenSSHv1.ps1"
                     ],
-                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File OpenSSHv3.ps1', ' -key ', parameters('key') )]"
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File OpenSSHv1.ps1', ' -key ', parameters('key') )]"
                 },
                 "protectedSettings": {}
             }
