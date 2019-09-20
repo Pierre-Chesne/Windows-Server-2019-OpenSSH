@@ -160,20 +160,19 @@
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "[parameters('vmSize')]"
-                },                
+                },
                 "osProfile": {
                     "computerName": "[parameters('vmName')]",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]",
-                    "windowsConfiguration":{
-                        "additionalUnattendContent":[
+                    "windowsConfiguration": {
+                        "additionalUnattendContent": [
                             {
                                 "passName": "oobesystem",
                                 "componentName": "Microsoft-Windows-Shell-Setup",
                                 "settingName": "AutoLogon",
                                 "content": "[concat('<AutoLogon><Password><Value>', parameters('adminPassword'), '</Value><PlainText>true</PlainText></Password><Enabled>true</Enabled><Username>', parameters('adminUsername'), '</Username></AutoLogon>')]"
                             }
-
                         ]
                     }
                 },
@@ -213,9 +212,9 @@
                 "typeHandlerVersion": "1.9",
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/Pierre-Chesne/Windows-Server-2019-OpenSSH/master/scripts/OpenSSHv1.0.ps1"
+                        "https://raw.githubusercontent.com/Pierre-Chesne/Windows-Server-2019-OpenSSH/master/scripts/OpenSSH.ps1"
                     ],
-                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File OpenSSHv1.0.ps1', ' -key ', '\"' , parameters('key') , '\"' )]"
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File OpenSSH.ps1', ' -key ', '\"' , parameters('key') , '\"' )]"
                 },
                 "protectedSettings": {}
             }
