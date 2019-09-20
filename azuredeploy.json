@@ -213,9 +213,9 @@
                 "typeHandlerVersion": "1.9",
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/Pierre-Chesne/Windows-Server-2019-OpenSSH/master/scripts/OpenSSHv2.ps1"
+                        "https://raw.githubusercontent.com/Pierre-Chesne/Windows-Server-2019-OpenSSH/master/scripts/OpenSSHv3.ps1"
                     ],
-                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File OpenSSHv2.ps1', ' -key ', '\"' , parameters('key') , '\"' )]"
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File OpenSSHv3.ps1', ' -key ', '\"' , parameters('key') , '\"' )]"
                 },
                 "protectedSettings": {}
             }
