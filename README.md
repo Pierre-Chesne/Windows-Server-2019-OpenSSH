@@ -1,6 +1,6 @@
 # Windows-Server-2019-OpenSSH
 
-Exemple de template de deploiement d'un serveur Windows Server 2019 avec un server OpenSSH (Nouvelle fonctionnalite de Windows Server 2019)
+Exemple de template de deploiement d'un serveur Windows Server 2019 avec un server OpenSSH (Nouvelle fonctionnalite de Windows Server 2019)<br/>
 Le script "OpenSSH.ps1" configure le service "OpenSSH SSH Server": <br/>
 - avec une authentifacation par cle ssh<br/>
 - un shell "PowerShell"<br/>
