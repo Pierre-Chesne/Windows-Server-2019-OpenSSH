@@ -5,8 +5,7 @@
 param( 
 [parameter(Mandatory=$true)]
 [string]
-$key,
-$adminUsername
+$key
 )
 
 # Installation OpenSSH Server
