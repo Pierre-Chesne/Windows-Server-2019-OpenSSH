@@ -1,5 +1,5 @@
 # Script d'installation "OpenSSH Server" pour Windows Server 2019
-# Authentification par cle publique
+# Authentification par cle SSH publique
 # Auteurs Pascal Sauliere et Pierre Chesne
 
 param( 
