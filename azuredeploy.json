@@ -13,8 +13,7 @@
             "type": "string",
             "metadata": {
                 "description": "Username for the Virtual Machine."
-            },
-            "defaultValue": "pierrc"
+            }
         },
         "adminPassword": {
             "type": "securestring",
