@@ -3,9 +3,8 @@
 # Auteurs Pascal Sauliere et Pierre Chesne
 
 param( 
-[parameter(Mandatory=$true)]
-[string]
-$key
+[parameter(Mandatory=$true)][string]$key,
+[parameter(Mandatory=$true)][string]$adminUsername
 )
 
 # Installation OpenSSH Server
@@ -25,10 +24,10 @@ New-ItemProperty `
   -PropertyType String -Force
 
 # Creation du repertoire .ssh
-New-Item -Path c:\Users\pierrc\.ssh -ItemType Directory
+New-Item -Path c:\Users\$adminUsername\.ssh -ItemType Directory
 
 # Copie de la cle publique
-Add-Content c:\Users\pierrc\.ssh\authorized_keys $key
+Add-Content c:\Users\$adminUsername\.ssh\authorized_keys $key
 
 # Parametrage du fichier sshd_config
 (Get-Content C:\ProgramData\ssh\sshd_config).Replace('#PubkeyAuthentication yes' , 'PubkeyAuthentication yes') | Set-Content C:\ProgramData\ssh\sshd_config
