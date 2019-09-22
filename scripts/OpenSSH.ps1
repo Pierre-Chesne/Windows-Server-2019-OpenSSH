@@ -26,10 +26,10 @@ New-ItemProperty `
   -PropertyType String -Force
 
 # Creation du repertoire .ssh
-New-Item -Path $adminUsername\.ssh -ItemType Directory
+New-Item -Path pierrc\.ssh -ItemType Directory
 
 # Copie de la cle publique
-Add-Content $adminUsername\.ssh\authorized_keys $key
+Add-Content pierrc\.ssh\authorized_keys $key
 
 # Parametrage du fichier sshd_config
 (Get-Content C:\ProgramData\ssh\sshd_config).Replace('#PubkeyAuthentication yes' , 'PubkeyAuthentication yes') | Set-Content C:\ProgramData\ssh\sshd_config
