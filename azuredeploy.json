@@ -185,7 +185,17 @@
                     "osDisk": {
                         "createOption": "FromImage",
                         "name": "[concat('osdisk-', parameters('vmName'))]"
-                    }
+                    },
+                    "dataDisks": [
+                        {
+                            "diskSizeGB": 32,
+                            "lun": 0,
+                            "createOption": "Empty",
+                            "name": "[concat('Datadisk1-', parameters('vmName'))]"
+                        }
+                    ]
+
+
                 },
                 "networkProfile": {
                     "networkInterfaces": [
@@ -215,9 +225,11 @@
                     ],
                     "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File OpenSSH.ps1', ' -key ', '\"' , parameters('key') , '\"', ' -adminUsername ', '\"' , parameters('adminUsername') , '\"') ]"
                 },
-                "protectedSettings": {}
+                "protectedSettings": {
+                }
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+    }
 }
